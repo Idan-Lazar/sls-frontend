@@ -50,7 +50,7 @@ class AuthStore {
       const result = await axios.post('/oauth/token',qs.stringify({
         client_id: 'ebvnIdewrkmc55kM5swdczoeMQbKG6Ru',
         client_secret : '-4B-0hkQzctIhGTyOmZYeCfiYKBVqkNpd3eWquRb6aNuumJAp_zaVXEjsR-1dNF6',
-       redirect_uri: procces.env.REDIRECT_URI,
+       redirect_uri: process.env.REACT_APP_REDIRECT_URI,
         grant_type: 'authorization_code',
         code,
         scope: 'openid'
