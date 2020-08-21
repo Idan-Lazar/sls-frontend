@@ -14,7 +14,7 @@ const LoginModal = (props) => {
     })
   };
   const Social = async (social) =>{
-    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=ebvnIdewrkmc55kM5swdczoeMQbKG6Ru&connection=${social}&redirect_uri=${procces.env.REDIRECT_URI}&scope=openid%20name%20email`
+    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=ebvnIdewrkmc55kM5swdczoeMQbKG6Ru&connection=${social}&redirect_uri=${process.env.REDIRECT_URI}&scope=openid%20name%20email`
   }
   return (
     <Modal
