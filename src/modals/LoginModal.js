@@ -1,10 +1,10 @@
 import React from "react";
 import { Modal, Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import {LockOutlined, MailOutlined } from "@ant-design/icons";
 import { inject, observer } from "mobx-react";
-import queryString from 'query-string';
 import "./LoginModal.scss";
-import Axios from 'axios';
+import { ReactComponent as GoogleIcon } from '../resoucres/google.svg'
+import { ReactComponent as FaceBookIcon } from '../resoucres/facebook.svg'
 
 const LoginModal = (props) => {
   const { authStore, visloginModal, setVisLoginModal , routerHistory } = props;
@@ -12,9 +12,10 @@ const LoginModal = (props) => {
     await authStore.signIn(values.email,values.password,values.remember).then(()=>{
         setVisLoginModal(false)
     })
+    routerHistory.push('/auctions')
   };
   const Social = async (social) =>{
-    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=ebvnIdewrkmc55kM5swdczoeMQbKG6Ru&connection=${social}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&scope=openid%20name%20email`
+    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=ebvnIdewrkmc55kM5swdczoeMQbKG6Ru&connection=${social}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&scope=openid profile`
   }
   return (
     <Modal
@@ -80,7 +81,10 @@ const LoginModal = (props) => {
           >
             התחבר
           </Button>
-          או <div onClick={()=> Social('github')}>הרשם</div>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around',marginTop: '10px'}}>
+            <GoogleIcon width={30} height={30}  onClick={()=> Social('google-oauth2')}/>
+            <FaceBookIcon width={30} height={30}  onClick={()=> Social('facebook')}/>
+          </div>
         </Form.Item>
       </Form>
     </Modal>

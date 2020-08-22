@@ -4,11 +4,12 @@ import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { inject, observer } from "mobx-react";
 import "./LoginModal.scss";
 const RegistarModal = (props) => {
-  const { authStore, visRegistarModal, setVisRegistarModal } = props;
+  const { authStore, visRegistarModal, setVisRegistarModal , routerHistory } = props;
   const onFinish = async (values) => {
     await authStore.signUp(values.email,values.password,values.remember).then(()=>{
         setVisRegistarModal(false)
     })
+    routerHistory.push('/auctions')
   };
   return (
     <Modal
@@ -80,4 +81,4 @@ const RegistarModal = (props) => {
     </Modal>
   );
 };
-export default inject("authStore")(observer(RegistarModal));
+export default inject("authStore","routerHistory")(observer(RegistarModal));

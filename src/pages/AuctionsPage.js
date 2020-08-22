@@ -74,11 +74,11 @@ const AuctionsPage = (props) => {
     return auctions.map((auction) => {
       let bidState = "CAN_BID";
 
-      if (auction.seller === authStore.email) {
+      if (auction.seller === authStore.sub) {
         bidState = "OWN_AUCTION";
       }
 
-      if (auction.highestBid.bidder === authStore.email) {
+      if (auction.highestBid.bidder === authStore.sub) {
         bidState = "HIGHEST_BIDDER";
       }
 

@@ -17,7 +17,7 @@ class AuthStore {
   
   @observable token = Cookies.get('token');
   @observable claims;
-  @observable email = Cookies.get('email');;
+  @observable sub = Cookies.get('sub');;
   @action
   async signIn(email,password,remember) {
     try {
@@ -27,16 +27,9 @@ class AuthStore {
         username : email,
         password,
         grant_type: 'password',
-        scope: 'openid'
+        scope: 'openid profile'
       }),headers);
-
-      this.token = result.data.id_token;
-      var decoded = jwt_decode(this.token);
-      this.setClaims(decoded)
-      if(remember){
-        Cookies.set('token', result.data.id_token);
-        Cookies.set('email', decoded.email);
-      }
+      this.setTokenAndClaims(result.data.id_token);
       OverlayStore.setLoadingSpinner(false);
     } catch (error) {
       alert('Could not fetch auctions! Check console for more details.');
@@ -48,21 +41,18 @@ class AuthStore {
     try {
       OverlayStore.setLoadingSpinner(true);
       const result = await axios.post('/oauth/token',qs.stringify({
-        client_id: 'ebvnIdewrkmc55kM5swdczoeMQbKG6Ru',
-        client_secret : '-4B-0hkQzctIhGTyOmZYeCfiYKBVqkNpd3eWquRb6aNuumJAp_zaVXEjsR-1dNF6',
+        client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+        client_secret : process.env.REACT_APP_AUTH0_CLIENT_SECRET,
        redirect_uri: process.env.REACT_APP_REDIRECT_URI,
         grant_type: 'authorization_code',
         code,
         scope: 'openid'
       }),headers);
-      this.token = result.data.id_token;
-      var decoded = jwt_decode(this.token);
-      this.setClaims(decoded)
-      Cookies.set('token', result.data.id_token);
-      Cookies.set('email', decoded.email);
+      this.setTokenAndClaims(result.data.id_token);
       OverlayStore.setLoadingSpinner(false);
     } catch (error) {
-      alert('Could not fetch auctions! Check console for more details.');
+      console.error(error);
+      alert('Could sign in');
       console.error(error);
     }
   }
@@ -89,20 +79,20 @@ class AuthStore {
   signOut() {
     this.token = null;
     Cookies.remove('token')
-    Cookies.remove('email')
-    this.email = null
+    Cookies.remove('sub')
+    this.sub = null
   }
 
   @action
-  setToken(token) {
+  setTokenAndClaims(token) {
     this.token = token;
+    let decoded = jwt_decode(this.token);
+    this.claims = decoded;
+    this.sub = decoded.sub;
+    Cookies.set('token',this.token);
+    Cookies.set('sub', decoded.sub);
   }
 
-  @action
-  setClaims(claims) {
-    this.claims = claims;
-    this.email = claims.email;
-  }
 }
 
 export default new AuthStore();

@@ -8,21 +8,14 @@ const PrivateRoute = ({ component: Component, authStore, routerHistory , path, .
   let isAuthenticated = authStore.token;
   const [visloginModal, setVisLoginModal] = useState(false);
   useEffect(() => {
-    async function fn(){
-      let params = queryString.parse(window.location.search)
-      await authStore.socialSignIn(params.code)
-      routerHistory.push(`/`)
-    }
-    if (window.location.search.includes("code=")){
-      fn()
-    }else{
+   
       if (authStore.token) {
         return;
       }
       else{
         setVisLoginModal(true)
       }
-    }
+    
    
   }, [authStore.token]);
 
