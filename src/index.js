@@ -7,18 +7,9 @@ import * as serviceWorker from "./serviceWorker";
 import AuctionStore from "./stores/AuctionStore";
 import AuthStore from "./stores/AuthStore";
 import OverlayStore from "./stores/OverlayStore";
-import { Auth0Provider } from "./react-auth0-spa";
 import history from "./utils/history";
-import "./style.scss";
 import "./normalize.scss";
 
-const onRedirectCallback = (appState) => {
-  history.push(
-    appState && appState.targetUrl
-      ? appState.targetUrl
-      : window.location.pathname
-  );
-};
 enableLogging()
 ReactDOM.render(
   <Provider
@@ -27,15 +18,7 @@ ReactDOM.render(
     routerHistory={history}
     overlayStore={OverlayStore}
   >
-    {/*  <Auth0Provider
-      authStore={AuthStore}
-      domain={process.env.REACT_APP_AUTH0_DOMAIN}
-      client_id={process.env.REACT_APP_AUTH0_CLIENT_ID}
-      redirect_uri={window.location.origin}
-      onRedirectCallback={onRedirectCallback}
-    > */}
       <App />
-     {/* </Auth0Provider>  */}
   </Provider>,
   document.getElementById("root")
 );

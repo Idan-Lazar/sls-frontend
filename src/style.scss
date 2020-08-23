@@ -10,3 +10,16 @@ body {
 .a {
   color: rgb(58, 80, 189);
 }
+.ant-form-item-control-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+}
+.ant-input-affix-wrapper:hover {
+  border-color: #5270e3 !important;
+  border-right-width: 1px !important;
+}
+.ant-col-rtl .login-form-forgot {
+  float: left;
+}

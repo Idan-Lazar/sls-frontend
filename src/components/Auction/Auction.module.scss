@@ -1,0 +1,35 @@
+.root {
+  width: 100%;
+}
+.media {
+  height: 280px;
+}
+.bidButton {
+  width: 70%;
+  border-width: 0px;
+  color: white;
+  background: linear-gradient(
+    90deg rgba(190, 52, 32, 1) 0%,
+    rgba(231, 75, 77, 1) 48%,
+    rgba(231, 148, 74, 1) 100%
+  );
+}
+.cardActions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+.detailsContainer {
+  display: flex;
+  padding: 0px;
+}
+.details {
+  display: flex;
+  flex-basis: 50%;
+  justify-content: center;
+  align-items: center;
+  padding-top: 18px;
+  padding-bottom: 10px;
+  text-align: center;
+}

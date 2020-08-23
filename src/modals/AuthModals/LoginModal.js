@@ -1,21 +1,25 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, Form, Input, Button, Checkbox } from "antd";
 import {LockOutlined, MailOutlined } from "@ant-design/icons";
 import { inject, observer } from "mobx-react";
-import "./LoginModal.scss";
-import { ReactComponent as GoogleIcon } from '../resoucres/google.svg'
-import { ReactComponent as FaceBookIcon } from '../resoucres/facebook.svg'
+import styles from "./AuthModal.module.scss";
+import { ReactComponent as GoogleIcon } from '../../resoucres/google.svg'
+import { ReactComponent as FaceBookIcon } from '../../resoucres/facebook.svg'
 
 const LoginModal = (props) => {
   const { authStore, visloginModal, setVisLoginModal , routerHistory } = props;
+  const [err, setErr] = useState('');
   const onFinish = async (values) => {
-    await authStore.signIn(values.email,values.password,values.remember).then(()=>{
+    setErr('');
+    await authStore.signIn(values.email,values.password).then(()=>{
         setVisLoginModal(false)
+        routerHistory.push('/auctions')
+    }).catch(()=>{
+      setErr('שם משתמש ו/או סיסמא שגויים')
     })
-    routerHistory.push('/auctions')
   };
   const Social = async (social) =>{
-    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=ebvnIdewrkmc55kM5swdczoeMQbKG6Ru&connection=${social}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&scope=openid profile`
+    window.location.href = `https://sls-project.eu.auth0.com/authorize?response_type=code&client_id=${process.env.REACT_APP_AUTH0_CLIENT_ID}&connection=${social}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&scope=openid profile`
   }
   return (
     <Modal
@@ -26,7 +30,7 @@ const LoginModal = (props) => {
     >
       <Form
         name="normal_login"
-        className="login-form"
+        className={styles.loginForm}
         initialValues={{
           remember: true,
         }}
@@ -64,11 +68,7 @@ const LoginModal = (props) => {
           />
         </Form.Item>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>זכור אותי</Checkbox>
-          </Form.Item>
-
-          <a className="login-form-forgot" href="">
+          <a className={styles.loginFormForgot} href="">
             שכחתי סיסמה
           </a>
         </Form.Item>
@@ -77,10 +77,11 @@ const LoginModal = (props) => {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
+            className={styles.loginFormButton}
           >
             התחבר
           </Button>
+          <div style={{color: 'red'}}>{err}</div>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-around',marginTop: '10px'}}>
             <GoogleIcon width={30} height={30}  onClick={()=> Social('google-oauth2')}/>
             <FaceBookIcon width={30} height={30}  onClick={()=> Social('facebook')}/>

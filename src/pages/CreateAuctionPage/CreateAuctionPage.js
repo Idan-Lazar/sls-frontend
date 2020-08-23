@@ -4,25 +4,15 @@ import {
   Container,
   FormControl,
   Button,
-  makeStyles,
   TextField,
 } from "@material-ui/core";
-import PictureUpload from '../components/PictureUpload';
+import PictureUpload from '../../components/PictureUpload';
+import styles from './CreateAuctionPage.module.scss'
 
-const useStyles = makeStyles((theme) => ({
-  form: {
-    maxWidth: 400,
-  },
-  pictureUpload: {
-    marginTop: 20,
-    marginBottom: 20,
-  },
-}));
 
 const CreateAuctionPage = ({ auctionStore, routerHistory }) => {
   const [title, setTitle] = useState("");
   const [base64, setBase64] = useState(null);
-  const classes = useStyles();
 
   const createAuction = async (title) => {
     await auctionStore.createAuction(title, base64);
@@ -33,7 +23,7 @@ const CreateAuctionPage = ({ auctionStore, routerHistory }) => {
     <Container width={200} fixed>
       <h1>Create an Auction</h1>
 
-      <form className={classes.form} noValidate autoComplete="off">
+      <form className={styles.form} noValidate autoComplete="off">
         <FormControl fullWidth>
           <TextField
             label="Auction Title"
@@ -45,7 +35,7 @@ const CreateAuctionPage = ({ auctionStore, routerHistory }) => {
             variant="outlined"
           />
         </FormControl>
-        <div className={classes.pictureUpload}>
+        <div className={styles.pictureUpload}>
           <PictureUpload onPictureSelected={base64 => setBase64(base64)} />
         </div>
         <div>

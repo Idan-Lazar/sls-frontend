@@ -19,7 +19,7 @@ class AuthStore {
   @observable claims;
   @observable sub = Cookies.get('sub');;
   @action
-  async signIn(email,password,remember) {
+  async signIn(email,password) {
     try {
       OverlayStore.setLoadingSpinner(true);
       const result = await axios.post('/oauth/token',qs.stringify({
@@ -32,8 +32,9 @@ class AuthStore {
       this.setTokenAndClaims(result.data.id_token);
       OverlayStore.setLoadingSpinner(false);
     } catch (error) {
-      alert('Could not fetch auctions! Check console for more details.');
+      OverlayStore.setLoadingSpinner(false);
       console.error(error);
+      throw error
     }
   }
   @action
@@ -51,27 +52,27 @@ class AuthStore {
       this.setTokenAndClaims(result.data.id_token);
       OverlayStore.setLoadingSpinner(false);
     } catch (error) {
+      OverlayStore.setLoadingSpinner(false);
       console.error(error);
-      alert('Could sign in');
-      console.error(error);
+      throw error
     }
   }
 
   @action
-  async signUp(email,password,remember) {
+  async signUp(email,password) {
     try {
-      OverlayStore.setLoadingSpinner(true);
-      const result = await axios.post('/dbconnections/signup',{
+      await axios.post('/dbconnections/signup',{
         client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
         email,
         password,
         connection: 'Username-Password-Authentication'
-      });
-      await this.signIn(email,password,remember)
-      OverlayStore.setLoadingSpinner(false);
+      }).then(async ()=>{
+        await this.signIn(email,password)
+      }).catch(error => {
+        throw error.response.data
+    });
     } catch (error) {
-      alert('Could not fetch auctions! Check console for more details.');
-      console.error(error);
+      throw error
     }
   }
 

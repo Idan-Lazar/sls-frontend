@@ -1,15 +1,24 @@
-import React from "react";
+import React,{useState} from "react";
 import { Modal, Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
 import { inject, observer } from "mobx-react";
-import "./LoginModal.scss";
+import styles from "./AuthModal.module.scss";
+
 const RegistarModal = (props) => {
   const { authStore, visRegistarModal, setVisRegistarModal , routerHistory } = props;
+  const [err, setErr] = useState('');
   const onFinish = async (values) => {
-    await authStore.signUp(values.email,values.password,values.remember).then(()=>{
+    await authStore.signUp(values.email,values.password).then(()=>{
         setVisRegistarModal(false)
+        routerHistory.push('/auctions')
+    }).catch((err)=>{
+      if(!err.description.rules[0].verified){
+        setErr('הסיסמא צריכה להכיל יותר מ8 תווים')
+      }else{
+        setErr('הסיסמה צריכה להכיל לפחות אות גדולה אחת אותיות קטנות ומספרים')
+      }
     })
-    routerHistory.push('/auctions')
+    
   };
   return (
     <Modal
@@ -20,7 +29,7 @@ const RegistarModal = (props) => {
     >
       <Form
         name="normal_login"
-        className="login-form"
+        className={styles.loginForm}
         initialValues={{
           remember: true,
         }}
@@ -58,11 +67,7 @@ const RegistarModal = (props) => {
           />
         </Form.Item>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>זכור אותי</Checkbox>
-          </Form.Item>
-
-          <a className="login-form-forgot" href="">
+          <a className={styles.loginFormForgot} href="">
             שכחתי סיסמה
           </a>
         </Form.Item>
@@ -71,11 +76,11 @@ const RegistarModal = (props) => {
           <Button
             type="primary"
             htmlType="submit"
-            className="login-form-button"
+            className={styles.loginFormButton}
           >
             הרשם
           </Button>
-          או <a href="">התחבר</a>
+          <div style={{color: 'red'}}>{err}</div>
         </Form.Item>
       </Form>
     </Modal>

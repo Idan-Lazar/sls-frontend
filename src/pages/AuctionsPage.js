@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { inject, observer } from "mobx-react";
-import Auction from "../components/Auction";
+import Auction from "../components/Auction/Auction";
 import BidModal from "../components/BidModal";
 import { Fab, makeStyles, ListItemText } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/LoadingSpinner/LoadingSpinner";
 
 const containerWidth = 1000;
 const cardPadding = 14;
